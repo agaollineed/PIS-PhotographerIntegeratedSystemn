@@ -1,0 +1,23 @@
+# --- Lulus ---
+DirectoryIndex index.php index.html
+
+# Jangan tampilkan isi folder
+Options -Indexes
+
+# Cache aset statis setahun (nama file diganti tiap deploy kalau isinya berubah)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# Tutup akses ke file konfigurasi
+<FilesMatch "^(config\.php|config\.sample\.php)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>

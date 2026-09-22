@@ -1,0 +1,1319 @@
+<?php require_once __DIR__ . '/app/lib.php'; boot(); ?>
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lulus | Fotografer Wisuda Surabaya</title>
+<meta name="description" content="Lulus: foto wisuda dan intimate celebration di Surabaya. Single, couple, group, dan arak-arakan session dengan unlimited photos. Booking cukup DP 40%.">
+<meta name="theme-color" content="#051f50">
+<meta name="csrf" content="<?= e(csrf_token()) ?>">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Lulus">
+<meta property="og:title" content="Lulus | avoid the missed moment">
+<meta property="og:description" content="Foto wisuda dan intimate celebration. Berbasis di Surabaya, siap datang ke mana pun ceritamu berlangsung.">
+<meta property="og:image" content="https://lulus.id/assets/crowd.jpg">
+<style>
+@font-face{font-family:"Poppins";font-weight:200;font-display:swap;src:url(fonts/poppins-latin-200-normal.woff2) format("woff2")}
+@font-face{font-family:"Poppins";font-weight:300;font-display:swap;src:url(fonts/poppins-latin-300-normal.woff2) format("woff2")}
+@font-face{font-family:"Poppins";font-weight:400;font-display:swap;src:url(fonts/poppins-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Poppins";font-weight:500;font-display:swap;src:url(fonts/poppins-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-weight:300;font-display:swap;src:url(fonts/plus-jakarta-sans-latin-300-normal.woff2) format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-weight:300;font-style:italic;font-display:swap;src:url(fonts/plus-jakarta-sans-latin-300-italic.woff2) format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-weight:400;font-display:swap;src:url(fonts/plus-jakarta-sans-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"Plus Jakarta Sans";font-weight:500;font-display:swap;src:url(fonts/plus-jakarta-sans-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"Pinyon Script";font-weight:400;font-display:swap;src:url(fonts/pinyon-script-latin-400-normal.woff2) format("woff2")}
+
+:root{
+  /* palet diambil dari gradient grain di pricelist Lulus */
+  --sky:#b7d3f4;
+  --mist:#7fa8cb;
+  --dusk:#4a6993;
+  --navy:#112452;
+  --abyss:#051f50;
+  --deep:#03153a;
+  --ink:#000;
+  --paper:#fff;
+  --paper-2:#f2f6fb;
+  --muted:#4a5363;
+  --line:rgba(0,0,0,.14);
+  --on-dark:#fff;
+  --on-dark-muted:rgba(255,255,255,.76);
+  --on-dark-line:rgba(255,255,255,.22);
+  --danger-on-dark:#ffc9c9;
+
+  --f-ui:"Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-brand:"Poppins", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-script:"Pinyon Script", "Snell Roundhand", "Apple Chancery", cursive;
+
+  --gutter:clamp(20px, 5vw, 56px);
+  --wrap:min(1180px, 100% - 2 * var(--gutter));
+  --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px;-webkit-text-size-adjust:100%;
+  /* warna kanvas saat overscroll; tanpa ini muncul pita putih di ujung atas */
+  background:var(--abyss);overscroll-behavior-y:none}
+body{margin:0;font-family:var(--f-ui);font-size:1rem;line-height:1.6;color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img{display:block;max-width:100%;height:auto}
+picture{display:contents}
+button,input,select,textarea{font:inherit}
+h1,h2,h3,p,ol,ul,figure{margin:0}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--mist);outline-offset:3px}
+[hidden]{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:12px;top:-60px;z-index:100;padding:10px 16px;border-radius:8px;background:#fff;color:var(--abyss);font-weight:500;text-decoration:none}
+.skip:focus{top:12px}
+.wrap{width:var(--wrap);margin-inline:auto}
+
+/* huruf script ala logo & pricelist: satu kapital swash di dalam kata sans */
+.sw{font-family:var(--f-script);font-weight:400;font-size:1.34em;line-height:0;letter-spacing:0;margin-right:-.05em}
+
+.grain{position:relative;isolation:isolate}
+.grain::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background-image:var(--grain);background-size:220px;mix-blend-mode:overlay;opacity:.5}
+.grain > *{position:relative;z-index:1}
+
+/* ---------- tombol ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 1.6em;border-radius:999px;border:1px solid transparent;font:500 .95rem/1 var(--f-ui);text-decoration:none;cursor:pointer;transition:background-color .2s,color .2s,border-color .2s}
+.btn-light{background:#fff;color:var(--abyss)}
+.btn-light:hover{background:var(--sky)}
+.btn-line-light{background:transparent;color:#fff;border-color:rgba(255,255,255,.6)}
+.btn-line-light:hover{background:rgba(255,255,255,.12)}
+.btn-dark{background:var(--abyss);color:#fff}
+.btn-dark:hover{background:var(--navy)}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;inset:0 0 auto;z-index:50;padding-top:env(safe-area-inset-top,0px);color:var(--abyss);transition:background-color .3s,color .3s}
+.nav-in{width:var(--wrap);margin-inline:auto;height:68px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+.brand{font-family:var(--f-brand);font-weight:300;font-size:1.55rem;line-height:1;text-decoration:none;letter-spacing:-.01em;white-space:nowrap}
+.brand .sw{font-size:1.5em}
+.nav-links{display:flex;gap:28px;list-style:none;padding:0}
+.nav-links a{font-size:.92rem;font-weight:500;text-decoration:none}
+.nav-links a:hover{text-decoration:underline;text-underline-offset:6px}
+.nav-cta{min-height:40px;padding:0 1.2em;font-size:.9rem;background:var(--abyss);color:#fff}
+.nav-cta:hover{background:var(--navy)}
+/* latar penuh, bukan blur: backdrop-filter memaksa browser menghitung ulang
+   area di belakang nav setiap frame saat halaman digulir */
+.nav.solid{background:var(--deep);color:#fff}
+.nav.solid .nav-cta{background:#fff;color:var(--abyss)}
+.nav.solid .nav-cta:hover{background:var(--sky)}
+@media (max-width:860px){.nav-links{display:none}}
+
+/* ---------- hero ---------- */
+.hero{min-height:100vh;min-height:100svh;display:grid;place-items:center;text-align:center;color:#fff;overflow:hidden;
+  background:
+    radial-gradient(70% 55% at 88% 102%, rgba(3,21,58,.95), rgba(3,21,58,0) 70%),
+    radial-gradient(75% 55% at 8% 98%, rgba(40,74,122,.75), rgba(40,74,122,0) 70%),
+    linear-gradient(180deg,#b7d3f4 0%,#b1cff0 16%,#93b6da 32%,#6389b4 45%,#34568a 58%,#15305f 72%,#051f50 100%)}
+.hero-in{display:grid;justify-items:center;padding:clamp(150px,24vh,240px) var(--gutter) clamp(72px,10vh,110px)}
+.wordmark{font-family:var(--f-brand);font-weight:300;font-size:clamp(5.2rem,18vw,13rem);line-height:1;letter-spacing:-.02em}
+.wordmark .sw{font-size:1.52em;margin-right:-.09em}
+.tagline{margin-top:clamp(28px,5vh,52px);font-family:var(--f-brand);font-weight:200;font-size:clamp(1rem,1.5vw,1.2rem);letter-spacing:.05em}
+.tagline b{font-weight:500}
+.hero-sub{max-width:36ch;margin-top:14px;font-weight:300;font-size:1rem;color:rgba(255,255,255,.88)}
+.hero-cta{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:32px}
+.wordmark{animation:mark 1.6s cubic-bezier(.2,.7,.2,1) both}
+.tagline,.hero-sub,.hero-cta{animation:up 1s .7s cubic-bezier(.2,.7,.2,1) both}
+@keyframes mark{from{opacity:0;filter:blur(14px);letter-spacing:.08em}to{opacity:1;filter:blur(0);letter-spacing:-.02em}}
+@keyframes up{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---------- band foto arak-arakan ---------- */
+.band{position:relative;background:#000}
+.band img{width:100%;height:clamp(300px,52vw,720px);object-fit:cover;object-position:50% 40%}
+.band::before,.band::after{content:"";position:absolute;left:0;right:0;z-index:1;pointer-events:none}
+.band::before{top:0;height:38%;background:linear-gradient(var(--abyss),rgba(5,31,80,0))}
+.band::after{bottom:0;height:30%;background:linear-gradient(rgba(0,0,0,0),#000)}
+
+/* ---------- tentang ---------- */
+.about{position:relative;overflow:hidden;background:#000;color:var(--on-dark-muted)}
+.about-photo{position:absolute;inset:0 0 0 40%;margin:0}
+.about-photo img{width:100%;height:100%;object-fit:cover;object-position:62% 40%;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 45%);mask-image:linear-gradient(90deg,transparent 0,#000 45%);opacity:.9}
+.about-copy{position:relative;z-index:1;max-width:34rem;padding-block:clamp(96px,14vw,180px);font-family:var(--f-brand);font-weight:300;font-size:clamp(1.12rem,1.8vw,1.45rem);line-height:1.62}
+.about-copy b{font-weight:400;color:#fff}
+.about-copy .sign{display:block;margin-top:1.1em;color:#fff;font-weight:400}
+@media (max-width:860px){
+  .about-photo{position:relative;inset:auto;height:78vw;max-height:520px}
+  .about-photo img{-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 22%,#000 55%,transparent);mask-image:linear-gradient(180deg,transparent 0,#000 22%,#000 55%,transparent);object-position:70% 30%}
+  .about-copy{padding-block:8px 88px}
+}
+
+/* ---------- portfolio ---------- */
+.moments{position:relative;min-height:clamp(440px,54vw,720px);display:flex;align-items:flex-end;background:#000;color:#fff}
+.moments img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 35%}
+.moments::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.8) 0,rgba(0,0,0,.4) 42%,rgba(0,0,0,0) 72%),linear-gradient(0deg,rgba(0,0,0,.9) 0,rgba(0,0,0,0) 50%)}
+.moments-copy{position:relative;z-index:1;padding-bottom:clamp(44px,7vw,96px)}
+.moments-copy > *{max-width:31rem}
+.moments-title{font-family:var(--f-brand);font-weight:500;font-size:clamp(2.1rem,4.6vw,3.5rem);line-height:1.02;letter-spacing:-.025em}
+.moments-copy p{margin-top:18px;font-family:var(--f-brand);font-weight:300;color:rgba(255,255,255,.84)}
+/* mosaik delapan foto: lewati perenderannya selama masih di luar layar */
+.gallery{background:#000;padding:12px 0 clamp(72px,10vw,120px);
+  content-visibility:auto;contain-intrinsic-size:auto 760px}
+.mosaic{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;aspect-ratio:3/1.94}
+.mcol{display:flex;flex-direction:column;gap:12px;min-height:0}
+.mcol figure{flex:var(--r) 1 0;min-height:0;overflow:hidden;background:#111}
+.mcol img{width:100%;height:100%;object-fit:cover}
+@media (max-width:700px){
+  .mosaic{display:block;columns:2;column-gap:8px;aspect-ratio:auto}
+  .mcol{display:contents}
+  .mcol figure{break-inside:avoid;margin-bottom:8px}
+  .mcol img{height:auto}
+}
+.gallery-more{margin-top:28px;color:var(--on-dark-muted);font-size:.95rem}
+.gallery-more a{color:#fff;text-underline-offset:5px}
+
+/* ---------- section umum (terang) ---------- */
+.sec{padding-block:clamp(80px,11vw,150px)}
+.sec-head{display:grid;gap:14px;margin-bottom:clamp(40px,6vw,72px)}
+.sec-title{font-family:var(--f-ui);font-weight:500;font-size:clamp(2.1rem,4.4vw,3.3rem);line-height:1.04;letter-spacing:-.03em}
+.sec-lede{max-width:52ch;color:var(--muted);font-size:1.05rem}
+
+/* ---------- paket ---------- */
+.pkg{border-top:1px solid var(--line)}
+.pkg-split{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(32px,6vw,96px);align-items:center;padding-block:clamp(48px,7vw,96px)}
+.pkg-split.flip{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+.pkg-split.flip .pkg-photo{order:2}
+.pkg-photo img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.pkg-name{font-family:var(--f-ui);font-weight:500;font-size:clamp(2.3rem,4.8vw,3.7rem);line-height:1.02;letter-spacing:-.035em}
+.pkg-kind{margin:.35em 0 0 2.4em;font-size:1.05rem;line-height:1.2}
+.pkg-kind .sw{font-size:1.5em}
+.tiers{list-style:none;padding:0;margin-top:clamp(28px,4vw,44px)}
+.tier{display:grid;grid-template-columns:clamp(5.4rem,8.6vw,7.4rem) minmax(0,1fr) auto;align-items:center;gap:8px 24px;padding-block:20px;border-top:1px solid var(--line)}
+.tier:last-child{border-bottom:1px solid var(--line)}
+.tier-price{font-weight:500;font-size:clamp(2rem,3.3vw,2.7rem);line-height:1;letter-spacing:-.04em;white-space:nowrap}
+.tier-spec{color:var(--muted);font-size:.97rem;line-height:1.45}
+.tier-spec strong{color:var(--ink);font-weight:500}
+.tier-pick{min-height:44px;padding:0 1.1em;border-radius:999px;border:1px solid var(--abyss);background:transparent;color:var(--abyss);font-weight:500;font-size:.9rem;cursor:pointer;white-space:nowrap;transition:background-color .2s,color .2s}
+.tier-pick:hover{background:var(--abyss);color:#fff}
+.pkg-note{margin-top:18px;font-style:italic;font-weight:300;color:var(--muted);font-size:.95rem}
+.pkg-wide{padding-top:clamp(48px,7vw,96px)}
+.pkg-wide .tiers{display:grid;grid-template-columns:1fr 1fr;column-gap:48px}
+.pkg-wide .tier:last-child{border-bottom:0}
+.pkg-wide .tiers{border-bottom:1px solid var(--line)}
+.pkg-band{margin-top:clamp(40px,6vw,72px)}
+.pkg-band img{width:100%;height:clamp(220px,30vw,420px);object-fit:cover;object-position:50% 45%;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 30%);mask-image:linear-gradient(180deg,transparent 0,#000 30%)}
+.pkg-cover{position:relative;overflow:hidden;background:#000;color:#fff}
+.pkg-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:62% 50%}
+.pkg-cover::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(0,0,0,.84) 0,rgba(0,0,0,.66) 42%,rgba(0,0,0,.12) 78%)}
+.cover-in{position:relative;z-index:2;padding-block:clamp(72px,10vw,130px)}
+.cover-in > *{max-width:36rem}
+.pkg-cover .pkg-kind{font-family:var(--f-brand);font-weight:300;letter-spacing:.32em;margin-left:5.2em}
+.pkg-cover .tier{border-color:rgba(255,255,255,.28)}
+.pkg-cover .tier-spec{color:rgba(255,255,255,.82)}
+.pkg-cover .tier-spec strong{color:#fff}
+.pkg-cover .tier-pick{border-color:#fff;color:#fff}
+.pkg-cover .tier-pick:hover{background:#fff;color:#000}
+.pkg-cover .pkg-note{color:rgba(255,255,255,.82)}
+@media (max-width:860px){
+  .pkg-split,.pkg-split.flip{grid-template-columns:1fr}
+  .pkg-split.flip .pkg-photo{order:0}
+  .pkg-photo img{aspect-ratio:5/4}
+  .pkg-wide .tiers{grid-template-columns:1fr}
+  .pkg-wide .tier:last-child{border-bottom:1px solid var(--line)}
+  .pkg-wide .tiers{border-bottom:0}
+  .pkg-cover::before{background:rgba(0,0,0,.66)}
+  .pkg-cover .pkg-kind{margin-left:3em}
+}
+@media (max-width:520px){
+  .tier{grid-template-columns:1fr auto}
+  .tier-spec{grid-column:1 / -1;grid-row:2}
+}
+
+/* ---------- ketentuan ---------- */
+/* bagian paket ditutup foto arak-arakan full-bleed, jadi tanpa padding bawah
+   supaya tidak ada pita putih sebelum Terms & Conditions */
+#paket{padding-bottom:0}
+.terms-sec{background:var(--paper-2);content-visibility:auto;contain-intrinsic-size:auto 620px}
+.terms{list-style:none;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 56px;counter-reset:t}
+.terms li{counter-increment:t;display:grid;grid-template-columns:2.4rem minmax(0,1fr);gap:0 14px;padding-block:24px;border-top:1px solid var(--line)}
+.terms li::before{content:counter(t);font-weight:500;font-size:1.5rem;line-height:1.1;color:var(--dusk)}
+.terms h3{font-weight:500;font-size:1.08rem;line-height:1.3}
+.terms p{grid-column:2;margin-top:6px;color:var(--muted)}
+@media (max-width:760px){.terms{grid-template-columns:1fr}}
+
+/* ---------- booking ---------- */
+.booking{color:#fff;color-scheme:dark;background:
+  radial-gradient(60% 50% at 100% 0,rgba(74,105,147,.55),rgba(74,105,147,0) 70%),
+  linear-gradient(180deg,var(--abyss) 0,#0a2660 55%,var(--navy) 100%)}
+.booking .sec-lede{color:var(--on-dark-muted)}
+.book-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr);gap:clamp(28px,4vw,56px);align-items:start}
+.steps{list-style:none;padding:0;display:flex;gap:10px;margin-bottom:32px;counter-reset:s}
+.steps li{flex:1;counter-increment:s;display:flex;align-items:center;gap:10px;padding-top:12px;border-top:2px solid var(--on-dark-line);color:var(--on-dark-muted);font-size:.9rem;line-height:1.3}
+.steps li::before{content:counter(s);display:grid;place-items:center;flex:none;width:26px;height:26px;border-radius:50%;border:1px solid currentColor;font-size:.8rem;font-weight:500}
+.steps li.done{border-top-color:var(--mist)}
+.steps li[aria-current="step"]{border-top-color:#fff;color:#fff}
+.steps li[aria-current="step"]::before{background:#fff;color:var(--abyss);border-color:#fff}
+.step{border:0;margin:0;padding:0;min-width:0}
+.step legend{padding:0;margin-bottom:18px;font-weight:500;font-size:1.3rem;line-height:1.3;color:#fff}
+.step legend:focus{outline:none}
+.group-label{display:block;margin:22px 0 10px;font-weight:500;font-size:.92rem}
+.opt-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.opt{position:relative;display:grid;gap:2px;padding:14px 40px 14px 16px;border:1px solid var(--on-dark-line);border-radius:12px;cursor:pointer;transition:border-color .2s,background-color .2s}
+.opt:hover{border-color:rgba(255,255,255,.5)}
+.opt input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.opt::after{content:"";position:absolute;top:16px;right:16px;width:14px;height:14px;border-radius:50%;border:1px solid rgba(255,255,255,.55)}
+.opt:has(input:checked){border-color:#fff;background:rgba(255,255,255,.1)}
+.opt:has(input:checked)::after{background:var(--sky);border-color:var(--sky);box-shadow:inset 0 0 0 3px var(--abyss)}
+.opt:has(input:focus-visible){outline:2px solid var(--sky);outline-offset:2px}
+.opt:has(input:disabled){opacity:.5;cursor:not-allowed}
+.opt-title{font-weight:500;line-height:1.3}
+.opt-sub{font-size:.86rem;color:var(--on-dark-muted);line-height:1.35}
+.opt-price{font-weight:500;font-size:.95rem;margin-top:4px}
+.field{display:grid;gap:7px;margin-top:20px}
+.field > label,.field > .lbl{font-weight:500;font-size:.92rem}
+.opt-label{font-weight:400;color:var(--on-dark-muted)}
+.input{width:100%;min-height:48px;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.06);color:#fff;font-size:1rem;color-scheme:dark}
+.input::placeholder{color:rgba(255,255,255,.6)}
+.input:focus-visible{outline:2px solid var(--sky);outline-offset:1px;border-color:transparent}
+.input[aria-invalid="true"]{border-color:var(--danger-on-dark)}
+select.input option{background:#0a2660;color:#fff}
+textarea.input{min-height:96px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+.hint{font-size:.86rem;color:var(--on-dark-muted);line-height:1.45}
+.check{display:flex;gap:12px;align-items:flex-start;margin-top:24px;font-size:.95rem;cursor:pointer}
+.check input{width:20px;height:20px;margin:2px 0 0;flex:none;accent-color:var(--sky)}
+.check a{color:#fff;text-underline-offset:4px}
+.step-error{margin-top:14px;color:var(--danger-on-dark);font-size:.92rem}
+.step-error:empty{display:none}
+.form-nav{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-top:30px}
+.form-nav .spacer{flex:1}
+.send-note{margin-top:18px;padding:14px 16px;border-radius:12px;background:rgba(183,211,244,.14);border:1px solid rgba(183,211,244,.4);font-size:.95rem}
+.summary{position:sticky;top:92px;padding:26px;border-radius:18px;background:rgba(3,21,58,.6);border:1px solid rgba(255,255,255,.16)}
+.summary h3{font-weight:500;font-size:1.1rem;margin-bottom:14px}
+.summary dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 16px;margin:0;font-size:.93rem}
+.summary dt{color:var(--on-dark-muted)}
+.summary dd{margin:0;text-align:right;overflow-wrap:anywhere}
+.summary .sum-total{margin-top:18px;padding-top:16px;border-top:1px solid var(--on-dark-line)}
+.sum-total dd{font-weight:500}
+.sum-total .big dd{font-size:1.35rem;letter-spacing:-.02em}
+.sum-note{margin-top:16px;font-size:.84rem;color:var(--on-dark-muted);line-height:1.5}
+@media (max-width:900px){
+  .book-grid{grid-template-columns:1fr}
+  .summary{position:static}
+}
+@media (max-width:560px){
+  .opt-grid,.row2{grid-template-columns:1fr}
+  .steps li{font-size:0;gap:0}
+  .steps li::before{font-size:.8rem}
+  .steps li[aria-current="step"]{font-size:.85rem;gap:8px}
+}
+
+/* ---------- slot jadwal ---------- */
+.slot-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(182px,1fr));gap:10px}
+.slot-grid:empty{display:none}
+.slot{position:relative;display:grid;gap:3px;padding:14px 16px;border:1px solid var(--on-dark-line);border-radius:12px;cursor:pointer;transition:border-color .2s,background-color .2s}
+.slot:hover{border-color:rgba(255,255,255,.5)}
+.slot input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.slot:has(input:checked){border-color:#fff;background:rgba(255,255,255,.1)}
+.slot:has(input:focus-visible){outline:2px solid var(--sky);outline-offset:2px}
+.slot:has(input:disabled){opacity:.42;cursor:not-allowed}
+.slot-time{font-weight:500}
+.slot-meta{font-size:.85rem;color:var(--on-dark-muted);line-height:1.35}
+.slot-left{margin-top:4px;font-size:.78rem;letter-spacing:.03em;text-transform:uppercase;color:var(--sky)}
+.slot:has(input:disabled) .slot-left{color:var(--danger-on-dark)}
+
+/* ---------- add-on ---------- */
+.addons{list-style:none;padding:0;display:grid;gap:10px}
+.addon{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:4px 14px;align-items:start;padding:14px 16px;border:1px solid var(--on-dark-line);border-radius:12px;transition:border-color .2s,background-color .2s}
+.addon:hover{border-color:rgba(255,255,255,.5)}
+.addon:has(.addon-on:checked){border-color:#fff;background:rgba(255,255,255,.08)}
+.addon-on{width:20px;height:20px;margin:2px 0 0;flex:none;accent-color:var(--sky)}
+.addon-name{font-weight:500;line-height:1.3;cursor:pointer}
+.addon-price{text-align:right;font-weight:500;white-space:nowrap}
+.addon-desc{grid-column:2/-1;font-size:.85rem;color:var(--on-dark-muted);line-height:1.4}
+.addon-qty{grid-column:2/-1;display:none;align-items:center;gap:10px;margin-top:6px;font-size:.86rem;color:var(--on-dark-muted)}
+.addon:has(.addon-on:checked) .addon-qty{display:flex}
+.addon-qty label{font-weight:400}
+.addon-qty input{width:84px;min-height:42px;padding:8px 10px;border-radius:9px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.06);color:#fff;color-scheme:dark}
+
+/* ---------- kode diskon ---------- */
+.disc-row{display:flex;gap:10px;align-items:start}
+.disc-row .input{flex:1;text-transform:uppercase}
+.disc-row .btn{flex:none}
+.disc-ok{color:var(--sky)}
+.disc-bad{color:var(--danger-on-dark)}
+
+/* ---------- konfirmasi & hasil ---------- */
+.review{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 18px;margin:0;padding:20px 22px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--on-dark-line);font-size:.94rem}
+.review dt{color:var(--on-dark-muted)}
+.review dd{margin:0;text-align:right;overflow-wrap:anywhere}
+.review .rule{grid-column:1/-1;height:1px;background:var(--on-dark-line);margin:4px 0}
+.review .big dd{font-size:1.2rem;font-weight:500;letter-spacing:-.02em}
+.book-done{max-width:660px;margin:0 auto;padding:clamp(28px,4vw,46px);border-radius:20px;background:rgba(3,21,58,.62);border:1px solid rgba(255,255,255,.18);text-align:center}
+.done-eyebrow{font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--on-dark-muted)}
+.done-code{margin-top:8px;font-weight:500;font-size:clamp(1.9rem,5vw,2.7rem);letter-spacing:.02em;line-height:1.1}
+.done-lede{margin-top:14px;color:var(--on-dark-muted)}
+.book-done .review{margin-top:26px;text-align:left}
+.done-cta{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:26px}
+.done-note{margin-top:18px;font-size:.86rem;color:var(--on-dark-muted)}
+.is-busy{opacity:.55;pointer-events:none}
+@media (max-width:640px){
+  .slot-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .slot{padding:12px 13px}
+  .disc-row{flex-wrap:wrap}
+  .disc-row .btn{width:100%}
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"ProfessionalService","name":"Lulus","description":"Fotografer wisuda dan intimate celebration berbasis di Surabaya.","url":"https://lulus.id","areaServed":"Surabaya","priceRange":"Rp350.000 - Rp1.000.000"}
+</script>
+</head>
+<body>
+<a class="skip" href="#booking">Langsung ke booking</a>
+
+<header class="nav" id="nav">
+  <div class="nav-in">
+    <a class="brand" href="#top" aria-label="Lulus, ke atas"><span aria-hidden="true"><span class="sw">L</span>u<span class="sw">l</span>us</span></a>
+    <ul class="nav-links">
+      <li><a href="#tentang">Tentang</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#paket">Paket</a></li>
+      <li><a href="#ketentuan">Ketentuan</a></li>
+      <li><a href="booking/track/">Cek booking</a></li>
+    </ul>
+    <a class="btn nav-cta" href="#booking">Booking sesi</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero grain" aria-labelledby="hero-title">
+    <div class="hero-in">
+      <h1 class="wordmark" id="hero-title"><span class="sr-only">Lulus, fotografer wisuda Surabaya</span><span aria-hidden="true"><span class="sw">L</span>u<span class="sw">l</span>us</span></h1>
+      <p class="tagline">avoid the missed <b>moment</b></p>
+      <p class="hero-sub">Foto wisuda dan intimate celebration. Berbasis di Surabaya, siap datang ke mana pun ceritamu berlangsung.</p>
+      <div class="hero-cta">
+        <a class="btn btn-light" href="#booking">Booking sesi</a>
+        <a class="btn btn-line-light" href="#paket">Lihat paket</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="band">
+    <picture><source type="image/webp" srcset="assets/crowd-sm.webp 960w, assets/crowd.webp 1920w" sizes="100vw"><img src="assets/crowd.jpg" width="1920" height="1080" alt="Wisudawan dan teman-teman mengangkat tangan di tengah arak-arakan wisuda, foto hitam putih" fetchpriority="high"></picture>
+  </div>
+
+  <section class="about" id="tentang" aria-label="Tentang Lulus">
+    <figure class="about-photo"><picture><source type="image/webp" srcset="assets/ijazah-sm.webp 800w, assets/ijazah.webp 1600w" sizes="(max-width: 860px) 100vw, 60vw"><img src="assets/ijazah.jpg" width="1600" height="900" alt="Wisudawan memegang ijazah sarjana dan medali, foto hitam putih" loading="lazy"></picture></figure>
+    <div class="wrap">
+      <p class="about-copy"><b>Lulus</b> is an independent visual artist specializing in capturing <b>graduation moments and intimate celebrations</b>. Based in Surabaya, yet always ready to travel wherever your story unfolds. We focus on preserving the genuine emotions of your special day, capturing beauty in every frame and making each session feel natural, meaningful, and fun. <span class="sign">Because every second matters, we're here to avoid the missed moment.</span></p>
+    </div>
+  </section>
+
+  <section id="portfolio" aria-labelledby="moments-title">
+    <div class="moments">
+      <picture><source type="image/webp" srcset="assets/moments.webp"><img src="assets/moments.jpg" width="960" height="540" alt="Wisudawati berkerudung merapikan kacamata hitam di tengah keramaian wisuda" loading="lazy"></picture>
+      <div class="wrap moments-copy">
+        <h2 class="moments-title" id="moments-title">The Moments We Capture.</h2>
+        <p>A collection of honest frames where emotions speak louder than poses. From joyful graduation days to quiet, intimate celebrations, our lens preserves the beauty of every fleeting second.</p>
+      </div>
+    </div>
+    <div class="gallery">
+      <div class="wrap">
+        <div class="mosaic">
+          <div class="mcol">
+            <figure style="--r:1.487"><picture><source type="image/webp" srcset="assets/m-crowd.webp"><img src="assets/m-crowd.jpg" width="351" height="522" alt="Keluarga dan teman memotret truk arak-arakan wisuda" loading="lazy"></picture></figure>
+            <figure style="--r:0.556"><picture><source type="image/webp" srcset="assets/m-cumlaude.webp"><img src="assets/m-cumlaude.jpg" width="527" height="293" alt="Wisudawati tertawa lebar sambil membentangkan selempang cumlaude" loading="lazy"></picture></figure>
+          </div>
+          <div class="mcol">
+            <figure style="--r:0.843"><picture><source type="image/webp" srcset="assets/m-couple.webp"><img src="assets/m-couple.jpg" width="517" height="436" alt="Pasangan wisudawan saling menatap dan tersenyum" loading="lazy"></picture></figure>
+            <figure style="--r:0.588"><picture><source type="image/webp" srcset="assets/m-its.webp"><img src="assets/m-its.jpg" width="742" height="436" alt="Pasangan wisudawan duduk di atas papan nama Institut Teknologi Sepuluh Nopember" loading="lazy"></picture></figure>
+            <figure style="--r:0.508"><picture><source type="image/webp" srcset="assets/m-bw.webp"><img src="assets/m-bw.jpg" width="413" height="210" alt="Dua wisudawan berkostum bertema berjalan di area kampus, foto hitam putih" loading="lazy"></picture></figure>
+          </div>
+          <div class="mcol">
+            <figure style="--r:0.644"><picture><source type="image/webp" srcset="assets/m-wave.webp"><img src="assets/m-wave.jpg" width="348" height="224" alt="Dua wisudawan berkacamata hitam melambai ke kamera, foto hitam putih" loading="lazy"></picture></figure>
+            <figure style="--r:0.548"><picture><source type="image/webp" srcset="assets/m-truck.webp"><img src="assets/m-truck.jpg" width="683" height="374" alt="Rombongan wisudawati tersenyum di atas truk arak-arakan" loading="lazy"></picture></figure>
+            <figure style="--r:0.614"><picture><source type="image/webp" srcset="assets/m-trio.webp"><img src="assets/m-trio.jpg" width="531" height="326" alt="Wisudawati berhias bunga tertawa bersama teman, foto hitam putih" loading="lazy"></picture></figure>
+          </div>
+        </div>
+        <p class="gallery-more" data-show-if="instagram">Karya terbaru ada di Instagram <a data-config="instagram" href="#" target="_blank" rel="noopener">Lulus</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="paket" aria-labelledby="paket-title">
+    <div class="wrap">
+      <header class="sec-head">
+        <h2 class="sec-title" id="paket-title">Paket sesi</h2>
+        <p class="sec-lede">Semua paket sudah termasuk unlimited photos, foto edit yang kamu pilih sendiri, dan free extra bonus.</p>
+      </header>
+
+      <article class="pkg pkg-split" id="pkg-single" aria-labelledby="pkg-single-name">
+        <figure class="pkg-photo"><picture><source type="image/webp" srcset="assets/pkg-single.webp"><img src="assets/pkg-single.jpg" width="447" height="540" alt="Wisudawati tersenyum menunduk dengan medali wisuda" loading="lazy"></picture></figure>
+        <div class="pkg-body">
+          <h3 class="pkg-name" id="pkg-single-name"><span class="sw">T</span>he One &amp; Only</h3>
+          <p class="pkg-kind">Single <span class="sw">S</span>ession</p>
+          <ul class="tiers"><li class="tier"><p class="tier-price">350k</p><p class="tier-spec"><strong>1 jam</strong><br>unlimited photos, 25 foto edit pilihanmu, free extra bonus</p><button type="button" class="tier-pick" data-pkg="single" data-tier="0" aria-label="Booking 1 jam, The One &amp; Only">Booking 1 jam</button></li><li class="tier"><p class="tier-price">550k</p><p class="tier-spec"><strong>2 jam</strong><br>unlimited photos, 35 foto edit pilihanmu, free extra bonus</p><button type="button" class="tier-pick" data-pkg="single" data-tier="1" aria-label="Booking 2 jam, The One &amp; Only">Booking 2 jam</button></li></ul>
+          <p class="pkg-note">Keluarga dan teman boleh ikut foto. Transport area ITS–UNAIR sudah termasuk.</p>
+        </div>
+      </article>
+
+      <article class="pkg pkg-split flip" id="pkg-couple" aria-labelledby="pkg-couple-name">
+        <figure class="pkg-photo"><picture><source type="image/webp" srcset="assets/pkg-couple.webp"><img src="assets/pkg-couple.jpg" width="522" height="540" alt="Pasangan wisudawan tertawa bersandar di dinding" loading="lazy"></picture></figure>
+        <div class="pkg-body">
+          <h3 class="pkg-name" id="pkg-couple-name"><span class="sw">T</span>ogether We <span class="sw">M</span>ade It</h3>
+          <p class="pkg-kind">Couple <span class="sw">S</span>ession</p>
+          <ul class="tiers"><li class="tier"><p class="tier-price">500k</p><p class="tier-spec"><strong>1 jam</strong><br>unlimited photos, 25 foto edit pilihanmu, free extra bonus</p><button type="button" class="tier-pick" data-pkg="couple" data-tier="0" aria-label="Booking 1 jam, Together We Made It">Booking 1 jam</button></li><li class="tier"><p class="tier-price">799k</p><p class="tier-spec"><strong>2,5 jam</strong><br>unlimited photos, 40 foto edit pilihanmu, free extra bonus</p><button type="button" class="tier-pick" data-pkg="couple" data-tier="1" aria-label="Booking 2,5 jam, Together We Made It">Booking 2,5 jam</button></li></ul>
+          <p class="pkg-note">Keluarga dan teman boleh ikut foto. Transport area ITS–UNAIR sudah termasuk.</p>
+        </div>
+      </article>
+
+      <article class="pkg pkg-wide" id="pkg-group" aria-labelledby="pkg-group-name">
+        <h3 class="pkg-name" id="pkg-group-name"><span class="sw">C</span>lass of 2025</h3>
+        <p class="pkg-kind">Group <span class="sw">S</span>ession untuk 3–5 <span class="sw">G</span>radumates</p>
+        <ul class="tiers"><li class="tier"><p class="tier-price">600k</p><p class="tier-spec"><strong>1 jam</strong><br>unlimited photos, 25 foto edit pilihanmu, free extra bonus</p><button type="button" class="tier-pick" data-pkg="group" data-tier="0" aria-label="Booking 1 jam, Class of 2025">Booking 1 jam</button></li><li class="tier"><p class="tier-price">900k</p><p class="tier-spec"><strong>2 jam</strong><br>unlimited photos, 40 foto edit pilihanmu, free extra bonus</p><button type="button" class="tier-pick" data-pkg="group" data-tier="1" aria-label="Booking 2 jam, Class of 2025">Booking 2 jam</button></li></ul>
+        <p class="pkg-note">Transport area ITS–UNAIR sudah termasuk.</p>
+      </article>
+    </div>
+    <figure class="pkg-band"><picture><source type="image/webp" srcset="assets/pkg-group.webp"><img src="assets/pkg-group.jpg" width="960" height="307" alt="Tiga wisudawan membentuk hati dengan tangan, foto hitam putih" loading="lazy"></picture></figure>
+
+    <article class="pkg-cover" id="pkg-arak" aria-labelledby="pkg-arak-name">
+      <picture><source type="image/webp" srcset="assets/pkg-arak.webp"><img src="assets/pkg-arak.jpg" width="960" height="540" alt="Wisudawati berkacamata hitam berdiri di tengah arak-arakan bermotor dengan bendera" loading="lazy"></picture>
+      <div class="wrap cover-in">
+        <h3 class="pkg-name" id="pkg-arak-name"><span class="sw">A</span>rak-Arakan</h3>
+        <p class="pkg-kind">Session</p>
+        <ul class="tiers"><li class="tier"><p class="tier-price">799k</p><p class="tier-spec"><strong>Single, 1 sesi penuh</strong><br>unlimited photos, 30 foto edit pilihanmu, free extra bonus</p><button type="button" class="tier-pick" data-pkg="arak" data-tier="0" aria-label="Booking single, Arak-Arakan">Booking single</button></li><li class="tier"><p class="tier-price">1000k</p><p class="tier-spec"><strong>Couple, 1 sesi penuh</strong><br>unlimited photos, 30 foto edit pilihanmu, free extra bonus</p><button type="button" class="tier-pick" data-pkg="arak" data-tier="1" aria-label="Booking couple, Arak-Arakan">Booking couple</button></li></ul>
+        <p class="pkg-note">Keluarga dan teman boleh ikut foto. Khusus area ITS.</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="sec terms-sec" id="ketentuan" aria-labelledby="terms-title">
+    <div class="wrap">
+      <header class="sec-head">
+        <h2 class="sec-title terms-title" id="terms-title">Terms &amp; Conditions</h2>
+        <p class="sec-lede">Enam hal yang perlu Gradumates tahu, dari booking sampai hasil foto di tangan.</p>
+      </header>
+      <ol class="terms">
+        <li><h3>Booking cukup DP 40%</h3><p>Booking &amp; DP gapake ribet! Gradumates bisa booking ke admin dengan membayar DP 40% saja.</p></li>
+        <li><h3>Reschedule maksimal H-1</h3><p>Ganti jadwal mendadak? Pasti bisa. Kabari paling lambat H-1, kami bantu carikan slot yang pas buat kamu.</p></li>
+        <li><h3>Pelunasan maksimal H-1</h3><p>Supaya sesi fotomu berjalan tanpa hambatan, pastikan pelunasan sudah beres paling lambat H-1 sebelum sesi.</p></li>
+        <li><h3>Durasi sesuai paket</h3><p>Waktu sesi berjalan sesuai paket yang kamu pilih. Manfaatkan setiap detiknya untuk berkreasi di depan kamera!</p></li>
+        <li><h3>Editing 2–3 hari</h3><p>Proses editing kilat, gapake lama. Tim kami mengedit selama 2–3 hari sesuai antrean sesi Gradumates.</p></li>
+        <li><h3>Hasil di Google Drive 14 hari</h3><p>Semua hasil fotomu tersedia di link Google Drive selama 14 hari. Unduh sebelum link-nya kedaluwarsa, ya!</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec booking grain" id="booking" aria-labelledby="book-title">
+    <div class="wrap">
+      <header class="sec-head">
+        <h2 class="sec-title" id="book-title">Booking sesi</h2>
+        <p class="sec-lede">Empat langkah singkat. Begitu pesananmu masuk, kode booking langsung dibuat dan dikirim ke emailmu — admin Lulus lalu mengonfirmasi slot dan detail DP lewat WhatsApp.</p>
+      </header>
+
+      <div class="book-grid" id="bookGrid">
+        <form id="bookForm" novalidate>
+          <ol class="steps" aria-label="Langkah booking">
+            <li aria-current="step">Data kamu</li>
+            <li>Paket &amp; add-on</li>
+            <li>Jadwal</li>
+            <li>Konfirmasi</li>
+          </ol>
+
+          <fieldset class="step" data-step="1">
+            <legend>Data kamu</legend>
+            <div class="field">
+              <label for="email">Email</label>
+              <input class="input" type="email" id="email" name="email" autocomplete="email" required placeholder="kamu@email.com">
+              <p class="hint">Kode booking dan ringkasan pesanan dikirim ke email ini. Kode itu juga yang dipakai untuk cek status booking.</p>
+            </div>
+            <div class="field">
+              <label for="name">Nama lengkap</label>
+              <input class="input" type="text" id="name" name="name" autocomplete="name" required>
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label for="wa">Nomor WhatsApp</label>
+                <input class="input" type="tel" id="wa" name="wa" autocomplete="tel" inputmode="tel" placeholder="0812xxxxxxxx" required>
+              </div>
+              <div class="field">
+                <label for="ig">Instagram <span class="opt-label">(opsional)</span></label>
+                <input class="input" type="text" id="ig" name="ig" autocomplete="off" placeholder="@username">
+              </div>
+            </div>
+            <div class="row2">
+              <div class="field">
+                <label for="university">Universitas</label>
+                <input class="input" type="text" id="university" name="university" list="univList" autocomplete="off" required placeholder="Institut Teknologi Sepuluh Nopember">
+              </div>
+              <div class="field">
+                <label for="faculty">Fakultas atau jurusan</label>
+                <input class="input" type="text" id="faculty" name="faculty" autocomplete="off" required placeholder="Teknik Informatika">
+              </div>
+            </div>
+            <datalist id="univList"><option value="Institut Teknologi Sepuluh Nopember"><option value="Universitas Airlangga"><option value="Universitas Negeri Surabaya"><option value="Universitas Surabaya"><option value="Universitas Kristen Petra"><option value="UIN Sunan Ampel Surabaya"><option value="Universitas 17 Agustus 1945 Surabaya"><option value="Universitas Muhammadiyah Surabaya"><option value="Universitas Ciputra"><option value="Universitas Katolik Widya Mandala Surabaya"><option value="Universitas Wijaya Kusuma Surabaya"><option value="Universitas Hang Tuah"><option value="Universitas Pembangunan Nasional Veteran Jawa Timur"><option value="Universitas Nahdlatul Ulama Surabaya"><option value="Universitas Dr. Soetomo"><option value="Universitas Hayam Wuruk Perbanas"><option value="Politeknik Elektronika Negeri Surabaya"><option value="Politeknik Perkapalan Negeri Surabaya"><option value="Politeknik Negeri Malang"><option value="Universitas Brawijaya"><option value="Universitas Negeri Malang"><option value="Universitas Jember"></datalist>
+            <span class="group-label" id="areaLabel">Area sesi</span>
+            <div class="opt-grid" role="radiogroup" aria-labelledby="areaLabel" id="areaOpts">
+              <label class="opt"><input type="radio" name="area" value="its"><span class="opt-title">ITS</span><span class="opt-sub">Institut Teknologi Sepuluh Nopember</span></label>
+              <label class="opt"><input type="radio" name="area" value="unair"><span class="opt-title">UNAIR</span><span class="opt-sub">Universitas Airlangga</span></label>
+              <label class="opt"><input type="radio" name="area" value="lain"><span class="opt-title">Kampus / lokasi lain</span><span class="opt-sub">Transport dikonfirmasi admin</span></label>
+            </div>
+            <div class="field" id="placeField" hidden>
+              <label for="place">Nama kampus atau lokasi</label>
+              <input class="input" type="text" id="place" name="place" autocomplete="off" placeholder="Contoh: UNESA Lidah Wetan">
+            </div>
+            <div class="field">
+              <label for="meet">Titik temu <span class="opt-label">(opsional)</span></label>
+              <input class="input" type="text" id="meet" name="meet" autocomplete="off" placeholder="Fakultas, gedung, atau patokan">
+            </div>
+            <p class="step-error" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="step" data-step="2" hidden>
+            <legend>Paket &amp; add-on</legend>
+            <p class="hint" id="pkgNote">Pilihan paket menyesuaikan area dan durasi slot yang sudah kamu pilih.</p>
+            <span class="group-label" id="pkgLabel">Paket utama</span>
+            <div class="opt-grid" role="radiogroup" aria-labelledby="pkgLabel" id="pkgOpts"></div>
+            <div id="tierBox" hidden>
+              <span class="group-label" id="tierLabel">Durasi</span>
+              <div class="opt-grid" role="radiogroup" aria-labelledby="tierLabel" id="tierOpts"></div>
+            </div>
+            <div class="field" id="groupField" hidden>
+              <label for="groupSize">Jumlah gradumates</label>
+              <select class="input" id="groupSize" name="groupSize">
+                <option value="3">3 orang</option>
+                <option value="4">4 orang</option>
+                <option value="5">5 orang</option>
+              </select>
+            </div>
+            <span class="group-label">Add-on <span class="opt-label">(opsional)</span></span>
+            <ul class="addons" id="addonList"></ul>
+            <span class="group-label" id="payLabel">Metode pembayaran</span>
+            <div class="opt-grid" role="radiogroup" aria-labelledby="payLabel">
+              <label class="opt"><input type="radio" name="payment" value="dp" checked><span class="opt-title">DP 40%</span><span class="opt-sub">Sisanya maksimal H-1 sebelum sesi</span></label>
+              <label class="opt"><input type="radio" name="payment" value="lunas"><span class="opt-title">Lunas di muka</span><span class="opt-sub">Bayar sekali, tidak ada sisa</span></label>
+            </div>
+            <div class="field">
+              <label for="discount">Kode diskon <span class="opt-label">(opsional)</span></label>
+              <div class="disc-row">
+                <input class="input" type="text" id="discount" name="discount" autocomplete="off" spellcheck="false" placeholder="Contoh: WISUDA10">
+                <button type="button" class="btn btn-line-light" id="btnDisc">Pakai kode</button>
+              </div>
+              <p class="hint" id="discMsg" role="status"></p>
+            </div>
+            <div class="field">
+              <label for="note">Catatan <span class="opt-label">(opsional)</span></label>
+              <textarea class="input" id="note" name="note" placeholder="Konsep foto, jumlah keluarga yang ikut, atau jadwal yang belum pasti"></textarea>
+            </div>
+            <p class="step-error" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="step" data-step="3" hidden>
+            <legend>Jadwal</legend>
+            <div class="field">
+              <label for="date">Tanggal sesi</label>
+              <input class="input" type="date" id="date" name="date" required>
+              <p class="hint">Jadwal wisuda belum keluar? Isi perkiraan dulu, lalu tulis di catatan — admin bantu atur ulang, gratis, maksimal H-1.</p>
+            </div>
+            <span class="group-label" id="slotLabel">Slot tersedia</span>
+            <div aria-live="polite">
+              <p class="hint" id="slotMsg">Pilih tanggal dulu, nanti slot yang masih kosong muncul di sini.</p>
+              <div class="slot-grid" id="slotOpts" role="group" aria-labelledby="slotLabel"></div>
+            </div>
+            <p class="hint" id="slotSum" hidden></p>
+            <p class="hint" id="slotAuto" hidden></p>
+            <p class="step-error" role="alert"></p>
+          </fieldset>
+
+          <fieldset class="step" data-step="4" hidden>
+            <legend>Konfirmasi</legend>
+            <p class="hint">Cek sekali lagi. Kalau sudah pas, kirim — kode booking langsung dibuat dan dikirim ke emailmu.</p>
+            <dl class="review" id="review" style="margin-top:18px"></dl>
+            <label class="check"><input type="checkbox" id="agree" name="agree"><span>Saya sudah membaca <a href="#ketentuan">Terms &amp; Conditions</a>, termasuk DP 40% dan pelunasan maksimal H-1.</span></label>
+            <p class="step-error" role="alert"></p>
+          </fieldset>
+
+          <div class="form-nav">
+            <button type="button" class="btn btn-line-light" id="btnBack" hidden>Kembali</button>
+            <span class="spacer"></span>
+            <button type="button" class="btn btn-light" id="btnNext">Lanjut</button>
+            <button type="submit" class="btn btn-light" id="btnSend" hidden>Kirim booking</button>
+          </div>
+        </form>
+
+        <aside class="summary" aria-labelledby="sum-title">
+          <h3 id="sum-title">Ringkasan</h3>
+          <dl aria-live="polite">
+            <dt>Nama</dt><dd id="sName">Belum diisi</dd>
+            <dt>Jadwal</dt><dd id="sDate">Belum dipilih</dd>
+            <dt>Slot</dt><dd id="sSlot">Belum dipilih</dd>
+            <dt>Paket</dt><dd id="sPkg">Belum dipilih</dd>
+            <dt>Durasi</dt><dd id="sTier">Belum dipilih</dd>
+            <dt>Foto edit</dt><dd id="sEdit">Belum dipilih</dd>
+            <dt>Add-on</dt><dd id="sAddon">Tidak ada</dd>
+            <dt>Lokasi</dt><dd id="sArea">Belum dipilih</dd>
+            <dt>Transport</dt><dd id="sTrans">Belum dipilih</dd>
+          </dl>
+          <dl class="sum-total" aria-live="polite">
+            <dt>Subtotal</dt><dd id="sSub">Rp0</dd>
+            <dt>Diskon</dt><dd id="sDisc">Rp0</dd>
+            <div class="big" style="display:contents"><dt id="sPayLabel">DP 40%</dt><dd id="sDp">Rp0</dd></div>
+            <dt>Total</dt><dd id="sTotal">Rp0</dd>
+            <dt id="sRestLabel">Pelunasan maks. H-1</dt><dd id="sRest">Rp0</dd>
+          </dl>
+          <p class="sum-note">Harga mengikuti pricelist Lulus. Admin mengonfirmasi slot lebih dulu, baru kamu membayar DP.</p>
+        </aside>
+      </div>
+
+      <div class="book-done" id="doneBox" hidden tabindex="-1">
+        <p class="done-eyebrow">Booking diterima</p>
+        <p class="done-code" id="doneCode"></p>
+        <p class="done-lede" id="doneLede"></p>
+        <dl class="review" id="doneSum"></dl>
+        <div class="done-cta">
+          <a class="btn btn-light" id="doneWa" href="#" target="_blank" rel="noopener">Kabari admin via WhatsApp</a>
+          <a class="btn btn-line-light" id="doneTrack" href="booking/track/">Cek status booking</a>
+        </div>
+        <p class="done-note" id="doneNote"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+
+<script>
+const CONFIG  = <?= json_encode(['whatsapp' => cfg('site.whatsapp', ''), 'instagram' => cfg('site.instagram', ''), 'email' => cfg('site.email', ''), 'dpRate' => (float)cfg('booking.dp_rate', 0.4)], JSON_UNESCAPED_SLASHES) ?>;
+const CATALOG = {"packages": [{"id": "single", "name": "The One & Only", "kind": "Single session", "tiers": [{"label": "1 jam", "price": 350000, "edited": 25, "hours": 1}, {"label": "2 jam", "price": 550000, "edited": 35, "hours": 2}], "areas": ["its", "unair", "lain"], "transport": ["its", "unair"], "group": false}, {"id": "couple", "name": "Together We Made It", "kind": "Couple session", "tiers": [{"label": "1 jam", "price": 500000, "edited": 25, "hours": 1}, {"label": "2,5 jam", "price": 799000, "edited": 40, "hours": 2.5}], "areas": ["its", "unair", "lain"], "transport": ["its", "unair"], "group": false}, {"id": "group", "name": "Class of 2025", "kind": "Group session 3–5 gradumates", "tiers": [{"label": "1 jam", "price": 600000, "edited": 25, "hours": 1}, {"label": "2 jam", "price": 900000, "edited": 40, "hours": 2}], "areas": ["its", "unair", "lain"], "transport": ["its", "unair"], "group": true}, {"id": "arak", "name": "Arak-Arakan", "kind": "Arak-arakan session", "tiers": [{"label": "Single, 1 sesi penuh", "price": 799000, "edited": 30, "hours": 3, "short": "single"}, {"label": "Couple, 1 sesi penuh", "price": 1000000, "edited": 30, "hours": 3, "short": "couple"}], "areas": ["its"], "transport": [], "group": false}], "addons": [{"id": "extra30", "name": "Extra 30 menit", "price": 125000, "unit": "30 menit", "max": 4, "hours": 0.5, "desc": "Perpanjang sesi setengah jam. Slot yang kamu pilih harus cukup menampungnya."}, {"id": "cover", "name": "Sewa cover ijazah", "price": 50000, "unit": "sesi", "max": 1, "hours": 0, "desc": "Cover ijazah sebagai properti foto, dipakai sepanjang sesi."}, {"id": "sameday", "name": "Same-day edit 5 foto", "price": 100000, "unit": "paket", "max": 1, "hours": 0, "desc": "Lima foto pilihanmu diedit dan dikirim 4–5 jam setelah sesi selesai, siap langsung diunggah hari itu juga."}], "areas": {"its": "ITS", "unair": "UNAIR", "lain": "Kampus / lokasi lain"}};
+const API     = 'api/';   /* kosong = mode pratinjau, tidak menyimpan apa pun */
+const TRACK   = 'booking/track/';
+
+(() => {
+  const $  = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const PKGS = CATALOG.packages, ADDONS = CATALOG.addons, AREA = CATALOG.areas;
+  const byId = Object.fromEntries(PKGS.map(p => [p.id, p]));
+  const rupiah = n => 'Rp' + Math.round(n).toLocaleString('id-ID');
+  const pad = n => String(n).padStart(2, '0');
+  const iso = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+  const jam = h => (Math.round(h * 10) / 10).toString().replace('.', ',') + ' jam';
+
+  /* ---- config: link kontak (dipakai tautan Instagram di bawah galeri) ---- */
+  $$('[data-show-if]').forEach(el => { if (!CONFIG[el.dataset.showIf]) el.hidden = true; });
+  $$('[data-config]').forEach(a => {
+    const k = a.dataset.config, v = (CONFIG[k] || '').trim();
+    if (k === 'whatsapp') a.href = 'https://wa.me/' + v;
+    if (k === 'instagram' && v) a.href = 'https://instagram.com/' + v.replace(/^@/, '');
+    if (k === 'email' && v) { a.href = 'mailto:' + v; a.textContent = v; }
+  });
+
+  /* ---- nav solid saat scroll ---- */
+  const nav = $('#nav');
+  const onScroll = () => nav.classList.toggle('solid', window.scrollY > window.innerHeight * 0.22);
+  window.addEventListener('scroll', onScroll, {passive: true});
+  onScroll();
+
+  /* ---- keadaan form ---- */
+  const form    = $('#bookForm');
+  const steps   = $$('.step', form);
+  const stepLis = $$('.steps li', form);
+  const dateEl  = $('#date');
+  const csrf    = document.querySelector('meta[name="csrf"]')?.content || '';
+  const LAST    = steps.length;
+  let step = 1;
+
+  const S = {slots: [], picked: new Set(), disc: null, pending: null, busy: false, reqId: 0};
+
+  const today = new Date();
+  dateEl.min = iso(today);
+  const maxDate = new Date(today); maxDate.setDate(maxDate.getDate() + 365);
+  dateEl.max = iso(maxDate);
+
+  const val  = n => { const el = form.elements[n]; return el && !el.length ? (el.value || '').trim() : (form.querySelector(`[name="${n}"]:checked`)?.value || ''); };
+  const pkg  = () => byId[val('pkg')] || null;
+  const tier = () => { const p = pkg(), i = val('tier'); return p && i !== '' ? p.tiers[+i] : null; };
+  const chosenSlots = () => S.slots.filter(s => S.picked.has(s.key));
+  const totalHours  = () => chosenSlots().reduce((a, s) => a + s.hours, 0);
+  const addonHours  = () => pickedAddons().reduce((a, x) => a + (x.hours || 0) * x.qty, 0);
+  const tierHours   = () => tier()?.hours || 0;
+  /* Slot yang dipilih menanggung durasi paketnya saja. Waktu dari add-on membuat
+     sesi berlanjut ke jam berikutnya — jam itu ditahan otomatis, bukan dipilih. */
+  const needSlots   = () => Math.ceil(tierHours() - 0.001);
+  const maxHours    = () => (pkg() ? Math.max(...pkg().tiers.map(t => t.hours)) : 0);
+  const nyambung    = () => chosenSlots().every((s, i, a) => i === 0 || s.start === a[i - 1].end);
+
+  /* Rentang sesi sebenarnya, misalnya 08:00–09:30 untuk 1 jam + extra 30 menit. */
+  function sesiWindow() {
+    const list = chosenSlots();
+    if (!list.length) return '';
+    const [h, m] = list[0].start.split(':').map(Number);
+    const menit = h * 60 + m + Math.round((tierHours() + addonHours()) * 60);
+    return `${list[0].start}–${pad(Math.floor(menit / 60))}:${pad(menit % 60)}`;
+  }
+
+  /* Jam sesudah sesi yang ikut ditahan karena add-on waktu. */
+  function hitungTahan() {
+    const extra = addonHours();
+    if (!extra || !S.picked.size) return {ok: true, list: []};
+    if (!nyambung()) {
+      return {ok: false, error: 'Karena kamu ambil extra 30 menit, jam sesinya harus berurutan — '
+        + 'misalnya 09:00–10:00 lalu 10:00–11:00, bukan jam yang berjauhan.'};
+    }
+    const urut = chosenSlots();
+    let sisa = tierHours() + extra - totalHours();
+    let cursor = urut[urut.length - 1].end;
+    const list = [];
+    while (sisa > 0.001) {
+      const next = S.slots.find(x => x.start === cursor);
+      if (!next) {
+        return {ok: false, error: `Extra 30 menit membuat sesimu berlanjut lewat jam ${cursor}, `
+          + 'dan tidak ada jam sesi sesudah itu. Pilih jam yang lebih awal, ya.'};
+      }
+      if (next.available < 1) {
+        return {ok: false, error: `Extra 30 menit membuat sesimu berlanjut ke jam ${next.start}, `
+          + 'tapi jam itu sudah dipesan orang lain. Pilih jam lain, atau lepas add-on-nya.'};
+      }
+      list.push(next);
+      sisa -= next.hours;
+      cursor = next.end;
+    }
+    return {ok: true, list};
+  }
+
+  /* =========================================================
+     Langkah 2 — tanggal & slot
+     ========================================================= */
+  const slotMsg = t => { $('#slotMsg').textContent = t; };
+
+  async function loadSlots() {
+    const d = dateEl.value;
+    S.slots = []; S.picked.clear();
+    $('#slotOpts').innerHTML = '';
+    renderSlotSum();
+    renderAutoNote();
+    if (!d) { slotMsg('Pilih tanggal dulu, nanti slot yang masih kosong muncul di sini.'); return; }
+
+    const my = ++S.reqId;
+    slotMsg('Mengecek slot yang kosong…');
+    let data;
+    try {
+      data = API
+        ? await fetch(`${API}slots.php?date=${encodeURIComponent(d)}`, {headers: {Accept: 'application/json'}}).then(r => r.json())
+        : mockSlots(d);
+    } catch (e) {
+      if (my === S.reqId) slotMsg('Slot gagal dimuat. Cek koneksi, lalu pilih tanggalnya lagi.');
+      return;
+    }
+    if (my !== S.reqId) return;
+    if (!data.ok) { slotMsg(data.error || 'Slot tidak bisa dimuat untuk tanggal itu.'); return; }
+    S.slots = data.slots || [];
+    renderSlots();
+    renderSlotSum();
+    renderAutoNote();
+    updateSummary();
+  }
+
+  function renderSlots() {
+    const box = $('#slotOpts');
+    if (!S.slots.length) {
+      box.innerHTML = '';
+      slotMsg('Belum ada slot yang bisa diambil di tanggal itu. Coba tanggal lain, atau kabari admin lewat WhatsApp.');
+      return;
+    }
+    slotMsg(addonHours() > 0
+      ? `Satu slot = 1 jam. Paketmu butuh ${needSlots()} slot, dan karena ada extra 30 menit jamnya harus berurutan.`
+      : `Satu slot = 1 jam. Paketmu butuh ${needSlots()} slot — boleh di jam yang berjauhan, misalnya 14:00 dan 18:00.`);
+    box.innerHTML = S.slots.map(s => `
+      <label class="slot">
+        <input type="checkbox" name="slot" value="${esc(s.key)}"${s.available < 1 ? ' disabled' : ''}>
+        <span class="slot-time">${esc(s.start)}–${esc(s.end)}</span>
+        <span class="slot-meta">${esc(s.label)} · ${jam(s.hours)}</span>
+        <span class="slot-left">${s.available < 1 ? 'Penuh' : 'Sisa ' + s.available}</span>
+      </label>`).join('');
+    applySlotLimits();
+  }
+
+  function renderSlotSum() {
+    const el = $('#slotSum'), n = S.picked.size, need = needSlots();
+    if (!pkg()) { el.hidden = true; return; }
+    el.hidden = false;
+    if (!n) { el.textContent = `Paketmu butuh ${need} slot (${jam(tierHours())}).`; return; }
+    const kurang = need - n;
+    let teks = `${n} dari ${need} slot · ${chosenSlots().map(s => s.start + '–' + s.end).join(', ')}`;
+    if (kurang > 0)            teks += ` · kurang ${kurang} slot lagi`;
+    else if (addonHours() > 0) teks += ` · sesi berjalan ${sesiWindow()}`;
+    else                       teks += ` · total ${jam(totalHours())}`;
+    el.textContent = teks;
+  }
+
+  /* Paket mengikuti jumlah slot yang dipilih: 2 slot jadi paket 2 jam, dan seterusnya. */
+  function syncTier() {
+    const p = pkg();
+    if (!p) return;
+    const sesi = totalHours();
+    let target = Math.min(...p.tiers.map(t => t.hours));
+    p.tiers.forEach(t => { if (t.hours <= sesi + 0.001 && t.hours > target) target = t.hours; });
+    const cur = tier();
+    if (cur && Math.abs(cur.hours - target) < 0.001) return;   // sudah pas, jangan ganggu
+    const i = p.tiers.findIndex(t => Math.abs(t.hours - target) < 0.001);
+    const r = $(`#tierOpts input[name="tier"][value="${i}"]`);
+    if (r) r.checked = true;
+  }
+
+  function renderAutoNote() {
+    const el = $('#slotAuto'), p = pkg(), t = tier();
+    if (!p || !t || !S.picked.size) { el.hidden = true; return; }
+    el.hidden = false;
+    let teks = `Paket mengikuti pilihanmu: ${p.name} — ${t.label}, ${rupiah(t.price)}.`;
+    let buruk = false;
+    if (addonHours() > 0) {
+      const th = hitungTahan();
+      if (!th.ok) { teks = th.error; buruk = true; }
+      else if (th.list.length) {
+        teks += ` Sesinya berjalan ${sesiWindow()}, jadi jam `
+              + th.list.map(x => x.start + '–' + x.end).join(', ')
+              + ' ikut kami tahan supaya sesimu tidak dipotong booking lain.';
+      }
+    }
+    el.textContent = teks;
+    el.classList.toggle('disc-bad', buruk);
+  }
+
+  /* Kunci slot berikutnya begitu durasi paket terpanjang sudah terpenuhi. */
+  function applySlotLimits() {
+    const penuh = totalHours() >= maxHours() - 0.001;
+    $$('#slotOpts input[name="slot"]').forEach(cb => {
+      const s = S.slots.find(x => x.key === cb.value);
+      cb.disabled = (!s || s.available < 1) || (penuh && !cb.checked);
+    });
+  }
+
+  /* Paket atau add-on berubah setelah slot dipilih: buang slot yang kelebihan. */
+  function trimSlots() {
+    const cap = maxHours();
+    let sum = 0;
+    const keep = new Set();
+    chosenSlots().forEach(s => { if (sum + s.hours <= cap + 0.001) { keep.add(s.key); sum += s.hours; } });
+    if (keep.size !== S.picked.size) {
+      S.picked = keep;
+      $$('#slotOpts input[name="slot"]').forEach(cb => { cb.checked = S.picked.has(cb.value); });
+    }
+    syncTier();
+    applySlotLimits();
+  }
+
+  /* =========================================================
+     Langkah 3 — paket, add-on, diskon
+     ========================================================= */
+  function renderPackages() {
+    const area = val('area');
+    const keep = val('pkg');
+    $('#pkgOpts').innerHTML = PKGS.map(p => {
+      const okArea = !area || p.areas.includes(area);
+      const low = Math.min(...p.tiers.map(t => t.price));
+      const sub = okArea ? `${esc(p.kind)}, mulai ${rupiah(low)}`
+                         : `Khusus area ${p.areas.map(a => AREA[a]).join(', ')}`;
+      return `<label class="opt"><input type="radio" name="pkg" value="${p.id}"${okArea ? '' : ' disabled'}>
+        <span class="opt-title">${esc(p.name)}</span><span class="opt-sub">${sub}</span></label>`;
+    }).join('');
+
+    const back = form.querySelector(`input[name="pkg"][value="${keep}"]`);
+    if (back && !back.disabled) back.checked = true;
+
+    $('#pkgNote').textContent = 'Durasi bisa berubah sendiri di langkah Jadwal, mengikuti jumlah slot yang kamu pilih.';
+    renderTiers();
+  }
+
+  function renderTiers() {
+    const p = pkg();
+    $('#tierBox').hidden = !p;
+    $('#groupField').hidden = !(p && p.group);
+    if (!p) { applyPending(); return; }
+    const keep = val('tier');
+    $('#tierLabel').textContent = p.id === 'arak' ? 'Pilihan sesi' : 'Durasi';
+    $('#tierOpts').innerHTML = p.tiers.map((t, i) => {
+      const slot = Math.ceil(t.hours - 0.001);
+      return `<label class="opt"><input type="radio" name="tier" value="${i}">
+        <span class="opt-title">${esc(t.label)}</span>
+        <span class="opt-sub">${t.edited} foto edit pilihanmu · ${slot} slot</span>
+        <span class="opt-price">${rupiah(t.price)}</span></label>`;
+    }).join('');
+    const back = $(`#tierOpts input[name="tier"][value="${keep}"]`);
+    if (back) back.checked = true;
+    else $('#tierOpts input[name="tier"]').checked = true;   // durasi terpendek sebagai awalan
+    applyPending();
+  }
+
+  function applyPending() {
+    if (!S.pending) return;
+    const pr = form.querySelector(`input[name="pkg"][value="${S.pending.pkg}"]`);
+    if (!pr || pr.disabled) return;
+    if (!pr.checked) { pr.checked = true; renderTiers(); return; }
+    const tr = $(`#tierOpts input[name="tier"][value="${S.pending.tier}"]`);
+    if (tr && !tr.disabled) tr.checked = true;
+    S.pending = null;
+    updateSummary();
+  }
+
+  function renderAddons() {
+    $('#addonList').innerHTML = ADDONS.map(a => `
+      <li class="addon">
+        <input class="addon-on" type="checkbox" id="ad-${a.id}" data-addon="${a.id}">
+        <label class="addon-name" for="ad-${a.id}">${esc(a.name)}</label>
+        <span class="addon-price">${rupiah(a.price)}<br><span class="opt-label">/${esc(a.unit)}</span></span>
+        <p class="addon-desc">${esc(a.desc)}</p>
+        ${a.max > 1 ? `<div class="addon-qty"><label for="aq-${a.id}">Jumlah</label>
+          <input id="aq-${a.id}" type="number" min="1" max="${a.max}" value="1" step="1" data-qty="${a.id}"></div>` : ''}
+      </li>`).join('');
+  }
+
+  function pickedAddons() {
+    return $$('.addon-on:checked').map(cb => {
+      const a = ADDONS.find(x => x.id === cb.dataset.addon);
+      const qtyEl = $(`[data-qty="${a.id}"]`);
+      const qty = Math.min(a.max, Math.max(1, parseInt(qtyEl?.value || '1', 10) || 1));
+      return {id: a.id, name: a.name, price: a.price, qty, total: a.price * qty, hours: a.hours || 0};
+    });
+  }
+
+  const subtotal = () => (tier()?.price || 0) + pickedAddons().reduce((a, x) => a + x.total, 0);
+
+  function discMsg(text, ok) {
+    const el = $('#discMsg');
+    el.textContent = text;
+    el.className = 'hint' + (text ? (ok ? ' disc-ok' : ' disc-bad') : '');
+  }
+
+  async function applyDiscount(quiet = false) {
+    const code = $('#discount').value.trim().toUpperCase();
+    const sub = subtotal();
+    if (!code) { S.disc = null; discMsg(''); updateSummary(); return; }
+    if (!sub)  { S.disc = null; discMsg('Pilih paketnya dulu, baru kode diskon bisa dihitung.', false); updateSummary(); return; }
+    if (!quiet) discMsg('Mengecek kode…', true);
+    let data;
+    try {
+      data = API
+        ? await fetch(`${API}discount.php?code=${encodeURIComponent(code)}&subtotal=${sub}`, {headers: {Accept: 'application/json'}}).then(r => r.json())
+        : mockDiscount(code, sub);
+    } catch (e) { discMsg('Kode diskon gagal dicek. Coba lagi sebentar lagi.', false); return; }
+    if (data.ok) {
+      S.disc = {code: data.code, amount: data.amount};
+      discMsg(`Kode ${data.code} dipakai — potongan ${rupiah(data.amount)}.`, true);
+    } else {
+      S.disc = null;
+      discMsg(data.error || 'Kode diskon tidak berlaku.', false);
+    }
+    updateSummary();
+  }
+
+  /* =========================================================
+     Ringkasan & konfirmasi
+     ========================================================= */
+  function fmtDate(v) {
+    if (!v) return '';
+    const [y, m, d] = v.split('-').map(Number);
+    return new Intl.DateTimeFormat('id-ID', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}).format(new Date(y, m - 1, d));
+  }
+
+  function areaText() {
+    const a = val('area');
+    if (!a) return '';
+    return a === 'lain' ? (val('place') || AREA.lain) : AREA[a];
+  }
+
+  function transportText() {
+    const p = pkg(), a = val('area');
+    if (!p || !a) return 'Belum dipilih';
+    if (p.transport.includes(a)) return 'Termasuk';
+    if (a === 'lain') return 'Dikonfirmasi admin';
+    return 'Khusus area ITS';
+  }
+
+  function totals() {
+    const sub = subtotal();
+    const disc = Math.min(S.disc?.amount || 0, sub);
+    const total = sub - disc;
+    const lunas = val('payment') === 'lunas';
+    const dp = lunas ? total : Math.round(total * CONFIG.dpRate);
+    return {sub, disc, total, dp, rest: total - dp, lunas};
+  }
+
+  function updateSummary() {
+    const p = pkg(), t = tier(), add = pickedAddons(), T = totals();
+    $('#sName').textContent  = val('name') || 'Belum diisi';
+    $('#sDate').textContent  = dateEl.value ? fmtDate(dateEl.value) : 'Belum dipilih';
+    $('#sSlot').textContent  = !S.picked.size ? 'Belum dipilih'
+      : (addonHours() > 0 ? sesiWindow() : chosenSlots().map(s => s.start + '–' + s.end).join(', '));
+    $('#sPkg').textContent   = p ? p.name : 'Belum dipilih';
+    $('#sTier').textContent  = t ? t.label + (p.group ? `, ${val('groupSize')} orang` : '') : 'Belum dipilih';
+    $('#sEdit').textContent  = t ? `${t.edited} foto` : 'Belum dipilih';
+    $('#sAddon').textContent = add.length ? add.map(a => `${a.name} ×${a.qty}`).join(', ') : 'Tidak ada';
+    $('#sArea').textContent  = areaText() || 'Belum dipilih';
+    $('#sTrans').textContent = transportText();
+    $('#sSub').textContent   = rupiah(T.sub);
+    $('#sDisc').textContent  = T.disc ? '-' + rupiah(T.disc) : 'Rp0';
+    $('#sPayLabel').textContent  = T.lunas ? 'Bayar lunas' : 'DP 40%';
+    $('#sDp').textContent    = rupiah(T.dp);
+    $('#sTotal').textContent = rupiah(T.total);
+    $('#sRestLabel').textContent = T.lunas ? 'Sisa' : 'Pelunasan maks. H-1';
+    $('#sRest').textContent  = rupiah(T.rest);
+  }
+
+  function reviewRows() {
+    const p = pkg(), t = tier(), add = pickedAddons(), T = totals();
+    const rows = [
+      ['Nama', val('name')],
+      ['Email', val('email')],
+      ['WhatsApp', normWA(val('wa'))],
+      ['Kampus', [val('university'), val('faculty')].filter(Boolean).join(' · ')],
+      ['Jadwal', fmtDate(dateEl.value)],
+      ['Slot', addonHours() > 0
+        ? `${sesiWindow()} (${jam(tierHours() + addonHours())})`
+        : chosenSlots().map(s => `${s.start}–${s.end}`).join(', ') + ` (${jam(totalHours())})`],
+      ['Lokasi', areaText() + (val('meet') ? ` · ${val('meet')}` : '')],
+      ['Transport', transportText()],
+      ['Paket', p ? `${p.name} — ${t.label}${p.group ? `, ${val('groupSize')} orang` : ''}` : '-'],
+      ['Foto edit', t ? `${t.edited} foto pilihanmu` : '-'],
+    ];
+    add.forEach(a => rows.push(['Add-on', `${a.name} ×${a.qty} — ${rupiah(a.total)}`]));
+    const th = hitungTahan();
+    if (th.ok && th.list.length) {
+      rows.push(['Jam ditahan', th.list.map(x => `${x.start}–${x.end}`).join(', ')]);
+    }
+    if (val('note')) rows.push(['Catatan', val('note')]);
+    rows.push(['rule', '']);
+    rows.push(['Subtotal', rupiah(T.sub)]);
+    if (T.disc) rows.push([`Diskon ${S.disc.code}`, '-' + rupiah(T.disc)]);
+    rows.push(['Total', rupiah(T.total)]);
+    rows.push([T.lunas ? 'Bayar lunas sekarang' : 'DP 40% dibayar sekarang', rupiah(T.dp), true]);
+    if (!T.lunas) rows.push(['Pelunasan maks. H-1', rupiah(T.rest)]);
+    return rows;
+  }
+
+  const rowsToHtml = rows => rows.map(([k, v, big]) =>
+    k === 'rule' ? '<div class="rule"></div>'
+                 : `<div style="display:contents" class="${big ? 'big' : ''}"><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`
+  ).join('');
+
+  const renderReview = () => { $('#review').innerHTML = rowsToHtml(reviewRows()); };
+
+  /* =========================================================
+     Validasi & navigasi langkah
+     ========================================================= */
+  function normWA(v) {
+    let d = v.replace(/\D/g, '');
+    if (d.startsWith('0')) d = '62' + d.slice(1);
+    else if (d.startsWith('8')) d = '62' + d;
+    return d;
+  }
+
+  const mark = (id, bad) => { const el = $('#' + id); if (el) el.setAttribute('aria-invalid', bad ? 'true' : 'false'); };
+
+  function validate(n) {
+    const errs = [];
+    if (n === 1) {
+      const mail = val('email');
+      const badMail = !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail);
+      mark('email', badMail);
+      if (badMail) errs.push('Isi email yang valid — kode booking dikirim ke sana.');
+      mark('name', val('name').length < 2);
+      if (val('name').length < 2) errs.push('Isi nama lengkap.');
+      const badWa = !/^62\d{8,13}$/.test(normWA(val('wa')));
+      mark('wa', badWa);
+      if (badWa) errs.push('Nomor WhatsApp belum valid. Contoh: 0812 3456 7890.');
+      mark('university', val('university').length < 2);
+      if (val('university').length < 2) errs.push('Isi nama universitas.');
+      mark('faculty', val('faculty').length < 2);
+      if (val('faculty').length < 2) errs.push('Isi fakultas atau jurusan.');
+      if (!val('area')) errs.push('Pilih area sesi.');
+      if (val('area') === 'lain') {
+        mark('place', !val('place'));
+        if (!val('place')) errs.push('Tulis nama kampus atau lokasi sesi.');
+      }
+    }
+    if (n === 2) {
+      const p = pkg(), t = tier();
+      if (!p) errs.push('Pilih paket dulu.');
+      else if (!t) errs.push(p.id === 'arak' ? 'Pilih single atau couple.' : 'Pilih durasi sesi.');
+    }
+    if (n === 3) {
+      const d = dateEl.value;
+      mark('date', !d || d < dateEl.min);
+      if (!d) errs.push('Isi tanggal sesi.');
+      else if (d < dateEl.min) errs.push('Tanggal sesi tidak boleh sebelum hari ini.');
+      else if (!S.picked.size) errs.push('Pilih slot sesimu.');
+      else if (tierHours() > totalHours() + 0.001) {
+        errs.push(`${tier().label} butuh ${jam(tierHours())}, jadi pilih ${needSlots()} slot. `
+                + `Kurang ${needSlots() - S.picked.size} lagi.`);
+      } else {
+        const th = hitungTahan();
+        if (!th.ok) errs.push(th.error);
+      }
+    }
+    if (n === 4 && !$('#agree').checked) errs.push('Centang persetujuan Terms & Conditions.');
+
+    $(`.step[data-step="${n}"] .step-error`).textContent = errs.join(' ');
+    return errs.length === 0;
+  }
+
+  function showStep(n, focus = true) {
+    step = n;
+    steps.forEach(fs => { fs.hidden = +fs.dataset.step !== n; });
+    stepLis.forEach((li, i) => {
+      if (i + 1 === n) li.setAttribute('aria-current', 'step'); else li.removeAttribute('aria-current');
+      li.classList.toggle('done', i + 1 < n);
+    });
+    $('#btnBack').hidden = n === 1;
+    $('#btnNext').hidden = n === LAST;
+    $('#btnSend').hidden = n !== LAST;
+    if (n === 2) renderPackages();
+    if (n === 3) { trimSlots(); renderSlotSum(); renderAutoNote(); }
+    if (n === LAST) renderReview();
+    if (focus) {
+      const lg = $(`.step[data-step="${n}"] legend`);
+      lg.setAttribute('tabindex', '-1');
+      lg.focus({preventScroll: true});
+      const top = form.getBoundingClientRect().top;
+      if (top < 60 || top > window.innerHeight * 0.6) form.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
+  }
+
+  /* =========================================================
+     Kirim
+     ========================================================= */
+  function setBusy(on) {
+    S.busy = on;
+    form.classList.toggle('is-busy', on);
+    $('#btnSend').textContent = on ? 'Mengirim…' : 'Kirim booking';
+  }
+
+  function payload() {
+    const p = pkg(), t = tier();
+    return {
+      csrf,
+      email: val('email'), name: val('name'), wa: normWA(val('wa')), ig: val('ig'),
+      university: val('university'), faculty: val('faculty'),
+      area: val('area'), place: val('place'), meet: val('meet'),
+      date: dateEl.value, slots: [...S.picked],
+      pkg: p.id, tier: p.tiers.indexOf(t), groupSize: p.group ? +val('groupSize') : 0,
+      addons: pickedAddons().map(a => ({id: a.id, qty: a.qty})),
+      discount: S.disc?.code || '', payment: val('payment'), notes: val('note'), agree: true,
+    };
+  }
+
+  async function send() {
+    if (S.busy) return;
+    for (let n = 1; n <= LAST; n++) if (!validate(n)) { showStep(n); return; }
+    setBusy(true);
+    let data;
+    try {
+      data = API
+        ? await fetch(`${API}booking.php`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', 'X-CSRF-Token': csrf},
+            body: JSON.stringify(payload()),
+          }).then(r => r.json())
+        : mockSubmit();
+    } catch (e) {
+      setBusy(false);
+      $('.step[data-step="4"] .step-error').textContent = 'Koneksi bermasalah, booking belum terkirim. Coba lagi, atau hubungi admin lewat WhatsApp.';
+      return;
+    }
+    setBusy(false);
+    if (!data.ok) {
+      $('.step[data-step="4"] .step-error').textContent = data.error || 'Booking gagal dikirim. Coba lagi sebentar lagi.';
+      if (/slot/i.test(data.error || '')) { showStep(2); loadSlots(); }
+      return;
+    }
+    showDone(data);
+  }
+
+  function showDone(data) {
+    $('#bookGrid').hidden = true;
+    const box = $('#doneBox');
+    box.hidden = false;
+    $('#doneCode').textContent = data.code;
+    $('#doneLede').textContent = `Simpan kodenya, ya. Ringkasan booking dikirim ke ${data.email}. `
+      + 'Admin Lulus mengonfirmasi slot lewat WhatsApp, biasanya di hari yang sama.';
+    $('#doneSum').innerHTML = rowsToHtml(
+      (data.lines || []).map(l => { const i = l.indexOf(': '); return i < 0 ? [l, ''] : [l.slice(0, i), l.slice(i + 2)]; })
+    );
+    $('#doneWa').href = data.wa_url || 'https://wa.me/' + (CONFIG.whatsapp || '');
+    $('#doneWa').hidden = !CONFIG.whatsapp && !data.wa_url;
+    $('#doneTrack').href = data.track_url || (TRACK + '?code=' + encodeURIComponent(data.code));
+    $('#doneNote').textContent = API ? '' : 'Ini halaman pratinjau — booking tidak benar-benar tersimpan. Di situs yang sudah online, kodenya keluar dari server.';
+    box.focus({preventScroll: true});
+    box.scrollIntoView({behavior: 'smooth', block: 'center'});
+  }
+
+  /* =========================================================
+     Mode pratinjau (file HTML tunggal, tanpa server)
+     ========================================================= */
+  function mockSlots(d) {
+    const label = h => h < 10 ? 'Pagi' : h < 14 ? 'Siang' : h < 16 ? 'Sore' : h < 18 ? 'Golden hour' : 'Malam';
+    const now = new Date(), isToday = d === iso(now), hhmm = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+    const slots = [];
+    for (let h = 5; h < 20; h++) {
+      const s = pad(h) + ':00', e = pad(h + 1) + ':00';
+      if (isToday && s <= hhmm) continue;
+      slots.push({key: `${s}-${e}`, start: s, end: e, label: label(h), hours: 1, available: 1});
+    }
+    return {ok: true, date: d, slots};
+  }
+
+  function mockDiscount(code, sub) {
+    if (code !== 'WISUDA10') return {ok: false, error: 'Kode diskon tidak ditemukan.'};
+    if (sub < 500000) return {ok: false, error: 'Kode ini berlaku untuk pesanan mulai Rp500.000.'};
+    return {ok: true, code, amount: Math.min(150000, Math.round(sub * 0.1))};
+  }
+
+  function mockSubmit() {
+    const d = new Date();
+    const code = `LLS-${String(d.getFullYear()).slice(2)}${pad(d.getMonth() + 1)}${pad(d.getDate())}-001`;
+    return {ok: true, code, email: val('email'), lines: reviewRows().filter(r => r[0] !== 'rule').map(([k, v]) => `${k}: ${v}`)};
+  }
+
+  /* =========================================================
+     Event
+     ========================================================= */
+  form.addEventListener('change', e => {
+    const t = e.target;
+    if (t.name === 'area')  { $('#placeField').hidden = val('area') !== 'lain'; renderPackages(); }
+    if (t.name === 'slot') {
+      t.checked ? S.picked.add(t.value) : S.picked.delete(t.value);
+      syncTier(); applySlotLimits(); renderSlotSum(); renderAutoNote();
+    }
+    if (t.name === 'pkg')   renderTiers();
+    if (t.id === 'date')    loadSlots();
+    if (t.classList.contains('addon-on') || t.dataset.qty) { renderTiers(); renderSlotSum(); }
+    if (t.name === 'tier') { renderSlotSum(); renderAutoNote(); }
+    if (t.classList.contains('addon-on') || t.dataset.qty || t.name === 'tier' || t.name === 'payment') {
+      if (S.disc) applyDiscount(true);
+    }
+    updateSummary();
+    if (step === LAST) renderReview();
+  });
+  form.addEventListener('input', () => { updateSummary(); if (step === LAST) renderReview(); });
+
+  $('#btnDisc').addEventListener('click', () => applyDiscount());
+  $('#discount').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); applyDiscount(); } });
+  $('#btnNext').addEventListener('click', () => { if (validate(step)) showStep(step + 1); });
+  $('#btnBack').addEventListener('click', () => showStep(step - 1));
+  form.addEventListener('submit', e => { e.preventDefault(); if (step === LAST) send(); });
+
+  /* ---- tombol "Booking" di tiap kartu paket ---- */
+  $$('.tier-pick').forEach(b => b.addEventListener('click', () => {
+    S.pending = {pkg: b.dataset.pkg, tier: b.dataset.tier};
+    const p = byId[b.dataset.pkg];
+    if (p && p.areas.length === 1) {
+      const r = form.querySelector(`input[name="area"][value="${p.areas[0]}"]`);
+      if (r) { r.checked = true; $('#placeField').hidden = true; }
+    }
+    showStep(1, false);
+    updateSummary();
+    document.getElementById('booking').scrollIntoView({behavior: 'smooth'});
+  }));
+
+  renderAddons();
+  showStep(1, false);
+  updateSummary();
+})();
+</script>
+</body>
+</html>

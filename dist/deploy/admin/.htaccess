@@ -1,0 +1,2 @@
+# Halaman admin tidak perlu diindeks mesin pencari.
+Header set X-Robots-Tag "noindex, nofollow"
