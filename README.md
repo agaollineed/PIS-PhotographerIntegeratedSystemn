@@ -2,67 +2,75 @@
 
 # Lulus
 
-**Website fotografer wisuda dengan pemesanan sesi dan panel admin.**
+**A graduation photography website with online booking and an admin dashboard.**
 
-<img src="assets/crowd.webp" alt="Portofolio fotografi wisuda Lulus" width="720">
+<img src="assets/crowd.webp" width="720" alt="Lulus graduation photography portfolio" />
+
+<p>
+  <img src="https://img.shields.io/badge/PHP-8.0%2B-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP 8.0+" />
+  <img src="https://img.shields.io/badge/MySQL-Database-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+  <img src="https://img.shields.io/badge/Python-3-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3" />
+  <img src="https://img.shields.io/badge/cPanel-Ready-FF6C2C?style=for-the-badge&logo=cpanel&logoColor=white" alt="cPanel ready" />
+</p>
 
 </div>
 
-## Ringkasan
+## Overview
 
-Lulus adalah situs fotografi wisuda untuk menampilkan portofolio, paket sesi, dan ketersediaan jadwal. Klien dapat mengirim booking dan melacak statusnya; admin mengelola slot, diskon, booking, dan pengiriman hasil foto.
+Lulus showcases graduation photography packages and availability. Clients can request a session and track its status; staff can manage bookings, time slots, discounts, and photo delivery from the admin dashboard.
 
-| Bagian | Fitur |
+## Features
+
+| Area | What it does |
 |---|---|
-| Situs publik | Portofolio, paket Single/Couple/Group/Arak-arakan, pilihan add-on, formulir booking |
-| Booking | Validasi harga dan durasi di server, kode booking, pelacakan status dengan kode dan email |
-| Admin | Booking masuk dan manual, kalender slot, diskon, perubahan status, pesan WhatsApp siap kirim |
-| Notifikasi | Email opsional; alur booking tetap dapat dipakai tanpa fungsi email hosting |
+| Public website | Portfolio, Single/Couple/Group/Arak-arakan packages, add-ons, and booking form |
+| Booking | Server-side price and duration validation, booking codes, and status tracking by code and email |
+| Admin dashboard | Booking management, manual bookings, slot calendar, discounts, and ready-to-send WhatsApp messages |
+| Notifications | Optional email updates; booking still works when email is unavailable |
 
-## Teknologi
+## Tech Stack
 
-- Frontend: HTML, CSS, dan JavaScript tanpa framework build frontend.
-- Backend: PHP 8.0+ dan MySQL.
-- Generator: Python 3 untuk menghasilkan preview mandiri dan paket deploy.
-- Target deploy: shared hosting dengan cPanel.
+| Layer | Technology |
+|---|---|
+| Frontend | HTML, CSS, and vanilla JavaScript |
+| Backend | PHP 8.0+ |
+| Database | MySQL |
+| Build and preview | Python 3; no frontend package manager or build framework |
+| Hosting | Shared hosting with cPanel |
 
-## Struktur proyek
+## Getting Started
 
-```text
-.
-├── template.html          # Template halaman utama
-├── build.py               # Generator preview dan paket deploy
-├── php/                   # API, logika booking, instalasi, dan admin
-├── assets/                # Foto dan gambar situs
-├── fonts/                 # Font lokal
-├── dist/
-│   ├── preview/           # Preview HTML mandiri; booking hanya simulasi
-│   └── deploy/            # Hasil siap unggah ke public_html
-└── CARA-DEPLOY.md         # Panduan pemasangan di cPanel
-```
-
-## Jalankan secara lokal
-
-Jalankan generator dari root proyek:
+Run the generator from the project root:
 
 ```bash
 python3 build.py
 ```
 
-Buka `dist/preview/lulus-landing.html` untuk melihat desain. Preview ini tidak menyimpan booking. Untuk menguji alur booking nyata, gunakan PHP dan MySQL dengan konfigurasi lokal berdasarkan `php/app/config.sample.php`.
+Open `dist/preview/lulus-landing.html` to explore the design. The preview simulates the booking interface and does not save requests. To test real bookings, configure PHP and MySQL using `php/app/config.sample.php` as the template.
 
-Harga dan aturan paket didefinisikan di `build.py`. Saat dibangun, data yang sama dipakai untuk kartu harga, formulir, dan validasi harga di server.
+Package prices and rules live in `build.py`. One build supplies the price cards, booking form, and server-side catalog.
 
-## Deploy
+## Project Structure
 
-Unggah **isi** `dist/deploy/` ke `public_html`, buat database MySQL, lalu salin `app/config.sample.php` menjadi `app/config.php` di server dan isi kredensial serta kontak. Jalankan `install.php` sekali untuk membuat tabel dan menyiapkan akses admin, kemudian hapus berkas instalasi dari server.
+```text
+.
+├── template.html          # Main page template
+├── build.py               # Preview and deployment generator
+├── php/                   # API, booking logic, installer, and admin pages
+├── assets/                # Photography and site images
+├── fonts/                 # Local fonts
+├── dist/
+│   ├── preview/           # Self-contained HTML preview
+│   └── deploy/            # Files for cPanel public_html
+└── CARA-DEPLOY.md         # Detailed deployment guide
+```
 
-Langkah lengkap ada di [CARA-DEPLOY.md](CARA-DEPLOY.md).
+## Deployment
 
-## Catatan keamanan
+Upload the **contents** of `dist/deploy/` to `public_html`. Create a MySQL database, copy `app/config.sample.php` to `app/config.php` on the server, and fill in the database and contact settings. Run `install.php` once to create the tables and set up admin access, then remove it from the server.
 
-`app/config.php` berisi kredensial dan tidak boleh di-commit. Berkas contoh `config.sample.php` hanya berisi placeholder. Sebelum situs dipakai publik, atur password admin, kunci akses admin, dan periksa konfigurasi database serta pembayaran.
+See the [cPanel deployment guide](CARA-DEPLOY.md) for the full setup. The guide is currently in Indonesian.
 
-## Status
+## Security and Licensing
 
-Ini adalah source dan hasil build proyek Lulus. Lisensi kode dan izin penggunaan foto belum dinyatakan di repository ini; hubungi pemilik proyek sebelum menggunakan ulang asetnya.
+Keep `app/config.php` and all credentials out of Git. Configure an admin password and access secret before opening the site to the public. The repository does not currently specify a code license or grant reuse rights for its photographs.
